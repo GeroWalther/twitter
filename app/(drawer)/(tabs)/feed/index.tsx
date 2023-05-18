@@ -22,7 +22,7 @@ export default function FeedScreed() {
     return <ActivityIndicator />;
   }
 
-  if (error) {
+  if (error instanceof Error) {
     return <Text>{error.message}</Text>;
   }
 
