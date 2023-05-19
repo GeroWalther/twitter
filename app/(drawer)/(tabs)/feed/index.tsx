@@ -26,7 +26,6 @@ export default function FeedScreed() {
     return <Text>{error.message}</Text>;
   }
 
-  function onPress() {}
   return (
     <View style={styles.page}>
       <FlatList data={data} renderItem={({ item }) => <Tweet tweet={item} />} />
@@ -37,7 +36,6 @@ export default function FeedScreed() {
           size={24}
           color="white"
           style={styles.floatingbutton}
-          onPress={onPress}
         />
       </Link>
     </View>

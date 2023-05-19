@@ -8,8 +8,8 @@ import { getTweet } from "../../../../../lib/api/tweets";
 export default function TweetScreen() {
   const { id } = useSearchParams();
   const { data, isLoading, error } = useQuery({
-    queryKey: ["tweet", id],
-    queryFn: () => getTweet(id as string),
+    queryKey: ["tweet", id], // for cashing
+    queryFn: () => getTweet(id as string), // async function
   });
 
   if (isLoading) {
