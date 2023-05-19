@@ -8,7 +8,7 @@ import {
 } from "react-native";
 import React, { useState } from "react";
 import { useRouter } from "expo-router";
-// import { login } from "../../lib/api/auth";
+import { login } from "../../lib/api/auth";
 
 const SignIn = () => {
   const [email, setEmail] = useState("");
@@ -33,6 +33,9 @@ const SignIn = () => {
         value={email}
         onChangeText={setEmail}
         style={styles.input}
+        autoCapitalize="none"
+        autoCorrect={false}
+        keyboardType="email-address"
       />
 
       <Pressable style={styles.button} onPress={onSignIn}>
@@ -73,6 +76,8 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     borderRadius: 10,
     marginVertical: 5,
+    marginBottom: 250,
+    marginTop: 20,
   },
   buttonText: {
     color: "white",

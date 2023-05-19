@@ -8,8 +8,8 @@ import {
 } from "react-native";
 import React, { useState } from "react";
 import { useSearchParams } from "expo-router";
-// import { authenticate } from '../../lib/api/auth';
-// import { useAuth } from '../../context/AuthContext';
+import { authenticate } from "../../lib/api/auth";
+// import { useAuth } from "../../context/AuthContext";
 
 const Authenticate = () => {
   const [code, setCode] = useState("");
@@ -23,7 +23,8 @@ const Authenticate = () => {
     }
     try {
       const res = await authenticate({ email, emailToken: code });
-      await updateAuthToken(res.authToken);
+      console.log(res);
+      // await updateAuthToken(res.authToken);
     } catch (e) {
       Alert.alert("Error", "Email code doesn't match");
     }
@@ -32,12 +33,15 @@ const Authenticate = () => {
   return (
     <View style={styles.container}>
       <Text style={styles.label}>Confirm your email</Text>
-
+      <Text>We have send you a confirmation code please paste it in here</Text>
       <TextInput
         placeholder="Email code"
         value={code}
         onChangeText={setCode}
         style={styles.input}
+        autoCapitalize="none"
+        autoCorrect={false}
+        keyboardType="number-pad"
       />
 
       <Pressable style={styles.button} onPress={onConfirm}>
@@ -78,6 +82,8 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     borderRadius: 10,
     marginVertical: 5,
+    marginBottom: 250,
+    marginTop: 20,
   },
   buttonText: {
     color: "white",
