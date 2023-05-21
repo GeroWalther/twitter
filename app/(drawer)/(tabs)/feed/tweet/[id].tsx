@@ -3,9 +3,10 @@ import tweets from "../../../../../assets/data/tweets";
 import { useSearchParams } from "expo-router";
 import { ActivityIndicator, Text } from "react-native";
 import { useQuery } from "@tanstack/react-query";
-import { getTweet } from "../../../../../lib/api/tweets";
+import { useTweetsApi } from "../../../../../lib/api/tweets";
 
 export default function TweetScreen() {
+  const { getTweet } = useTweetsApi();
   const { id } = useSearchParams();
   const { data, isLoading, error } = useQuery({
     queryKey: ["tweet", id], // for cashing

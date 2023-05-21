@@ -6,7 +6,8 @@ import {
   DrawerItem,
 } from "@react-navigation/drawer";
 import React from "react";
-import { Text, Linking } from "react-native";
+import { Text, Linking, ActivityIndicator } from "react-native";
+import { useAuth } from "../../context/AuthContext";
 
 const DrawerNavigator = createDrawerNavigator().Navigator;
 
@@ -31,6 +32,10 @@ function CustomDrawerContent(props) {
 }
 
 export default function DrawerLayout() {
+  const { authToken } = useAuth();
+  if (!authToken) {
+    return <ActivityIndicator />;
+  }
   return (
     <Drawer drawerContent={(props) => <CustomDrawerContent {...props} />}>
       <Drawer.Screen

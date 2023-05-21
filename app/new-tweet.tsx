@@ -11,7 +11,7 @@ import {
 import React, { useState } from "react";
 import { Link, useRouter } from "expo-router";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { createTweet } from "../lib/api/tweets";
+import { useTweetsApi } from "../lib/api/tweets";
 
 const user = {
   id: "123456789",
@@ -24,9 +24,10 @@ const user = {
 export default function NewTweet() {
   const [text, setText] = useState("");
   const router = useRouter();
+  const { createTweet } = useTweetsApi();
 
   const queryClient = useQueryClient();
-  const { mutateAsync, isLoading, isError, error, isSuccess } = useMutation({
+  const { mutateAsync, isLoading, isError, error } = useMutation({
     mutationFn: createTweet,
     onSuccess: (data) => {
       queryClient.setQueriesData(["tweets"], (existingTweets) => [
