@@ -6,7 +6,7 @@ import {
   DrawerItem,
 } from "@react-navigation/drawer";
 import React from "react";
-import { Text, Linking, ActivityIndicator } from "react-native";
+import { Text, Linking, ActivityIndicator, Button } from "react-native";
 import { useAuth } from "../../context/AuthContext";
 
 const DrawerNavigator = createDrawerNavigator().Navigator;
@@ -19,6 +19,8 @@ export const unstable_settings = {
 };
 
 function CustomDrawerContent(props) {
+  const { setAuthToken } = useAuth();
+
   return (
     <DrawerContentScrollView {...props}>
       <Text style={{ alignSelf: "center", fontSize: 20 }}>Gero</Text>
@@ -26,6 +28,12 @@ function CustomDrawerContent(props) {
       <DrawerItem
         label="View in Browser"
         onPress={() => Linking.openURL("https://Twitter.com/")}
+      />
+      <Button
+        title="Logout"
+        onPress={() => {
+          setAuthToken(null);
+        }}
       />
     </DrawerContentScrollView>
   );

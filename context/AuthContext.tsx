@@ -10,10 +10,12 @@ import * as SecureStore from "expo-secure-store";
 
 interface AuthContextType {
   authToken: string | null;
+  setAuthToken: (newToken: string) => void;
   updateAuthToken: (newToken: string, newDate: string) => void;
 }
 const AuthContext = createContext<AuthContextType>({
   authToken: null,
+  setAuthToken: (newToken: string) => {},
   updateAuthToken: (newToken: string, newDate: string) => {},
 });
 
@@ -23,13 +25,13 @@ const AuthContextProvider = ({ children }: PropsWithChildren) => {
   const segments = useSegments();
   const router = useRouter();
 
-  // useEffect(() => {
-  //   if (validAuthToken !== "" && new Date(validAuthToken) < new Date()) {
-  //     console.log("validate: ", validAuthToken);
-  //     setAuthToken(null);
-  //     setValidAuthToken("");
-  //   }
-  // }, [validAuthToken]);
+  useEffect(() => {
+    if (new Date(validAuthToken) < new Date()) {
+      console.log("validate: ", validAuthToken);
+      setAuthToken(null);
+      setValidAuthToken("");
+    }
+  }, [validAuthToken]);
 
   useEffect(() => {
     const isAuthGroup = segments[0] === "(auth)";
@@ -39,7 +41,7 @@ const AuthContextProvider = ({ children }: PropsWithChildren) => {
     if (!authToken && !isAuthGroup) {
       router.replace("/signIn");
     }
-    if (authToken && isAuthGroup && validAuthToken) {
+    if (authToken && isAuthGroup) {
       router.replace("/");
     }
   }, [segments, authToken]);
@@ -47,27 +49,27 @@ const AuthContextProvider = ({ children }: PropsWithChildren) => {
   useEffect(() => {
     const loadAuthToken = async () => {
       const res = await SecureStore.getItemAsync("authToken");
-      // const res2 = await SecureStore.getItemAsync("validEx");
+      const res2 = await SecureStore.getItemAsync("validEx");
       if (res) {
         setAuthToken(res);
       }
-      // if (res2) {
-      //   setValidAuthToken(res2);
-      // }
+      if (res2) {
+        setValidAuthToken(res2);
+      }
     };
     loadAuthToken();
   }, []);
 
   const updateAuthToken = async (newToken: string, newDate: string) => {
-    // const res = await SecureStore.setItemAsync("validEx", newDate);
-    // console.log("res: ", res);
+    const res = await SecureStore.setItemAsync("validEx", newDate);
+    console.log("res: ", res);
     await SecureStore.setItemAsync("authToken", newToken);
     setAuthToken(newToken);
-    // setValidAuthToken(newDate);
+    setValidAuthToken(newDate);
   };
 
   return (
-    <AuthContext.Provider value={{ authToken, updateAuthToken }}>
+    <AuthContext.Provider value={{ authToken, setAuthToken, updateAuthToken }}>
       {children}
     </AuthContext.Provider>
   );
