@@ -23,20 +23,20 @@ const AuthContextProvider = ({ children }: PropsWithChildren) => {
   const segments = useSegments();
   const router = useRouter();
 
-  useEffect(() => {
-    if (validAuthToken !== "" && new Date(validAuthToken) < new Date()) {
-      console.log("validate: ", validAuthToken);
-      setAuthToken(null);
-      setValidAuthToken("");
-    }
-  }, [validAuthToken]);
+  // useEffect(() => {
+  //   if (validAuthToken !== "" && new Date(validAuthToken) < new Date()) {
+  //     console.log("validate: ", validAuthToken);
+  //     setAuthToken(null);
+  //     setValidAuthToken("");
+  //   }
+  // }, [validAuthToken]);
 
   useEffect(() => {
     const isAuthGroup = segments[0] === "(auth)";
     console.log("inside authgroup: ", authToken);
     console.log("inside authgroup2: ", validAuthToken);
 
-    if (!authToken && !isAuthGroup && !validAuthToken) {
+    if (!authToken && !isAuthGroup) {
       router.replace("/signIn");
     }
     if (authToken && isAuthGroup && validAuthToken) {
@@ -47,20 +47,23 @@ const AuthContextProvider = ({ children }: PropsWithChildren) => {
   useEffect(() => {
     const loadAuthToken = async () => {
       const res = await SecureStore.getItemAsync("authToken");
-      const res2 = await SecureStore.getItemAsync("validEx");
-      if (res && res2) {
+      // const res2 = await SecureStore.getItemAsync("validEx");
+      if (res) {
         setAuthToken(res);
-        setValidAuthToken(res2);
       }
+      // if (res2) {
+      //   setValidAuthToken(res2);
+      // }
     };
     loadAuthToken();
   }, []);
 
   const updateAuthToken = async (newToken: string, newDate: string) => {
-    await SecureStore.setItemAsync("validEx", newDate);
+    // const res = await SecureStore.setItemAsync("validEx", newDate);
+    // console.log("res: ", res);
     await SecureStore.setItemAsync("authToken", newToken);
     setAuthToken(newToken);
-    setValidAuthToken(newDate);
+    // setValidAuthToken(newDate);
   };
 
   return (
